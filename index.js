@@ -96,6 +96,29 @@ PushwooshClient.prototype.sendMessage = function (msg, device, options, callback
     });
 };
 
+PushwooshClient.prototype.cancelMessage = function (msgCode, callback) {
+
+    var client = this;
+
+    if (typeof msgCode !== 'string') {
+        return callback(new Error('Message code must be provided'));
+    }
+
+    var body = {
+        request: {
+            auth: client.authToken,
+            message: msgCode
+        }
+    };
+
+    client.sendRequest('cancelMessage', body, function(error, response, body){
+        if (error) {
+            return callback(error);
+        }
+        client.parseResponse(response, body, callback);
+    });
+};
+
 PushwooshClient.prototype.deleteMessage = function (msgCode, callback) {
 
     var client = this;
